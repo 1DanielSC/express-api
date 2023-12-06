@@ -12,6 +12,12 @@ app.post('/funcionario', funcionarioController.create);
 app.put('/funcionario/:id', funcionarioController.update);
 app.delete('/funcionario/:id', funcionarioController.deleteById);
 
+const VendasController = require('./controller/VendasController')
+app.get('/venda', VendasController.findAll);
+app.get('/venda/vendedor/:id', VendasController.findByVendedor);
+app.get('/venda/:id', VendasController.findById);
+app.post('/venda', VendasController.create);
+app.delete('/venda/:id', VendasController.deleteById);
 
 app.listen(PORT, (error) =>{ 
     if(!error) 
