@@ -1,47 +1,29 @@
 const uuid = require('uuid');
-let vendas = [
-    {
-        id: uuid.v4(),
-        idVendedor: '1',
-        produtos:
-            [{
-                idProduto: '1',
-                preco: 10,
-                nome: "a",
-                qntd: 1
-            },
-            {
-                idProduto: '1',
-                preco: 20,
-                nome: "b",
-                qntd: 2
-            },
-        ]
-    },{
-        id: uuid.v4(),
-        idVendedor: '2',
-        produtos:
-            [{
-                idProduto: '12',
-                preco: 100,
-                nome: "bbb",
-                qntd: 2
-            },
-        ]
+const mongoose = require('mongoose');
 
-    }
-]
+const VendaModel = mongoose.model('Funcionario', {
+    _id: String,
+    idVendedor: String,
+    data: String,
+    produtos: [{
+        idProduto: String,
+        preco: Number,
+        nome: String,
+        qntd: Number
+    }]
+} );
 
-const findAll = (req, res) => {
+const findAll = async (req, res) => {
+    const vendas = await VendaModel.find();
     res.status(200).send(vendas)
 };
 
-const findByVendedor = (req, res) => {
+const findByVendedor = async (req, res) => {
     if(req &&
         req.params &&
         req.params.id){
             const idVendedor = req.params.id
-            const entity = vendas.find((venda) => venda.idVendedor === idVendedor)
+            const entity = await VendaModel.find((venda) => venda.idVendedor === idVendedor)
             if(!entity){
                 res.status(404).send('Entity not found by id')
                 return
@@ -53,12 +35,12 @@ const findByVendedor = (req, res) => {
     }
 };
 
-const findById = (req, res) => {
+const findById = async (req, res) => {
     if(req &&
         req.params &&
         req.params.id){
             const idVenda = req.params.id
-            const entity = vendas.find((venda) => venda.id === idVenda)
+            const entity = await VendaModel.findById(idVenda)
             if(!entity){
                 res.status(404).send('Entity not found by id')
                 return
@@ -70,7 +52,7 @@ const findById = (req, res) => {
     }
 };
 
-const create = (req, res) => {
+const create = async (req, res) => {
     if(req &&
         req.body){
         const { idVendedor, data, produtos} = req.body
@@ -80,15 +62,15 @@ const create = (req, res) => {
             return
         }
 
-        const newVenda = {
-            id : uuid.v4(),
+        const newVenda = new VendaModel({
+            _id : uuid.v4(),
             data : data,
             idVendedor : idVendedor,
             produtos : produtos,
-        }
+        });
 
-        vendas.push(newVenda)
-        res.status(200).send(newVenda)
+        const entity = await newVenda.save()
+        res.status(200).send(entity)
     }
     else{
         res.status(400).send('Request has no body')
@@ -96,13 +78,13 @@ const create = (req, res) => {
 
 };
 
-const deleteById = (req, res) => {
+const deleteById = async (req, res) => {
     if(req &&
         req.params &&
         req.params.id){
             const idVenda = req.params.id;
-            vendas = vendas.filter((venda) => venda.id !== idVenda)
-            res.status(200).send(vendas)
+            const entity = await VendaModel.findByIdAndDelete({_id : idVenda})
+            res.status(200).send(entity)
         }
     else{
         res.status(400).send('Missing param \'id\'')
