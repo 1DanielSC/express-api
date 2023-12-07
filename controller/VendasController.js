@@ -1,7 +1,7 @@
 const uuid = require('uuid');
 const mongoose = require('mongoose');
 
-const VendaModel = mongoose.model('Funcionario', {
+const VendaModel = mongoose.model('Venda', {
     _id: String,
     idVendedor: String,
     data: String,
