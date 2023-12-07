@@ -73,17 +73,18 @@ const findById = (req, res) => {
 const create = (req, res) => {
     if(req &&
         req.body){
-        const { id, idVendedor, produtos} = req.body
+        const { idVendedor, data, produtos} = req.body
 
-        if(!idVendedor || !produtos){
+        if(!idVendedor || !data || !produtos){
             res.status(400).send('Missing required fields.')
             return
         }
 
         const newVenda = {
             id : uuid.v4(),
-            idVendedor,
-            produtos,
+            data : data,
+            idVendedor : idVendedor,
+            produtos : produtos,
         }
 
         vendas.push(newVenda)
