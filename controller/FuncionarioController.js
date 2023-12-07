@@ -1,24 +1,27 @@
 const uuid = require('uuid');
+const mongoose = require('mongoose');
 
-let funcionarios = [
-    {
-        id: uuid.v4(),
-        nome: 'Daniel',
-        idade: 22,
-        salario: 8.000
-    }
-]
+const FuncionarioModel = mongoose.model('Funcionario', {
+    _id: String,
+    nome: String,
+    sexo: String,
+    departamento: String,
+    idade: Number,
+    salario: Number
+} );
 
-const findAll = (req, res) => {
+
+const findAll = async (req, res) => {
+    const funcionarios = await FuncionarioModel.find();
     res.status(200).send(funcionarios)
 };
 
-const findById = (req, res) => {
+const findById = async (req, res) => {
     if(req &&
         req.params &&
         req.params.id){
             const idFuncionario = req.params.id
-            const entity = funcionarios.find((funcionario) => funcionario.id === idFuncionario)
+            const entity = await FuncionarioModel.findById(idFuncionario)
             if(!entity){
                 res.status(404).send('Entity not found by id')
                 return
@@ -30,46 +33,47 @@ const findById = (req, res) => {
     }
 };
 
-const create = (req, res) => {
+const create = async (req, res) => {
     if(req &&
         req.body){
-        const { nome, idade, salario } = req.body
+        const { nome, sexo, departamento, idade, salario } = req.body
 
         if(!nome || !idade || !salario){
             res.status(400).send('Missing required fields.')
             return
         }
 
-        const newFuncionario = {
-            id : uuid.v4(),
-            nome,
-            idade,
-            salario
-        }
-
-        funcionarios.push(newFuncionario)
-        res.status(200).send(newFuncionario)
+        const newFuncionario = new FuncionarioModel({
+            _id : uuid.v4(),
+            nome: nome,
+            sexo: sexo,
+            departamento: departamento,
+            idade: idade,
+            salario: salario
+        });
+        
+        const entity = await newFuncionario.save()
+        res.status(200).send(entity)
     }
     else{
         res.status(400).send('Request has no body')
     }
-
 };
 
-const update = (req, res) => {
+const update = async (req, res) => {
     if(req &&
         req.body &&
         req.params &&
         req.params.id){
             const idFuncionario = req.params.id;
-            entity = funcionarios.find((funcionario) => funcionario.id === idFuncionario);
+
+            const entity = await FuncionarioModel.findById(idFuncionario)
             if(!entity){
                 res.status(404).send('Entity not found by id')
                 return
             }
 
-            const { nome, idade, salario } = req.body
-
+            const { nome, sexo, departamento, idade, salario } = req.body
             if(!nome || !idade || !salario){
                 res.status(400).send('Missing required fields.')
                 return
@@ -78,8 +82,11 @@ const update = (req, res) => {
             entity.nome = nome
             entity.salario = salario
             entity.idade = idade
+            entity.sexo = sexo
+            entity.departamento = departamento
 
-            res.status(200).send(entity)
+            const entityUpdated = await FuncionarioModel.findByIdAndUpdate(idFuncionario, entity)
+            res.status(200).send(entityUpdated)
         }
     else{
         res.status(400)
@@ -91,13 +98,13 @@ const update = (req, res) => {
 
 };
 
-const deleteById = (req, res) => {
+const deleteById = async (req, res) => {
     if(req &&
         req.params &&
         req.params.id){
             const idFuncionario = req.params.id;
-            funcionarios = funcionarios.filter((funcionario) => funcionario.id !== idFuncionario)
-            res.status(200).send(funcionarios)
+            const entity = await FuncionarioModel.findByIdAndDelete({_id : idFuncionario})
+            res.status(200).send(entity)
         }
     else{
         res.status(400).send('Missing param \'id\'')

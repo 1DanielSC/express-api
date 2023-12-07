@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  mongo:
+    container_name: ${MONGODB_NAME}
+    image: mongo:${MONGODB_VERSION}
+    env_file: .env
+    ports:
+      - ${MONGODB_PORT}:27017
+    volumes:
+      - ${MONGODB_PATH}:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      #MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
+      TZ: "America/Fortaleza"
+    command: [ --auth ]
+    restart: always
+    healthcheck:
+      test: echo 'db.stats().ok' | mongo localhost:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
