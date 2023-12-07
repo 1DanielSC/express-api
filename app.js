@@ -46,6 +46,12 @@ const connectToDatabase = async () => {
     }
 }
 
+const VendasController = require('./controller/VendasController')
+app.get('/venda', VendasController.findAll);
+app.get('/venda/vendedor/:id', VendasController.findByVendedor);
+app.get('/venda/:id', VendasController.findById);
+app.post('/venda', VendasController.create);
+app.delete('/venda/:id', VendasController.deleteById);
 
 const initialize = async () => {
     await startServer();
