@@ -2,14 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const routes = require('./routes');
-const bodyParser = require('body-parser')
 require('dotenv').config()
 
 const app = express(); 
 app.use(cors());
 app.use(routes.router); //Rotas REST da aplicação
 app.use(express.json());
-app.use(bodyParser.json())
 
 
 const PORT = process.env.SERVER_PORT; 

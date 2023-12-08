@@ -1,8 +1,8 @@
-const funcionarioController = require('./controller/FuncionarioController')
 const express = require('express');
-
 const router = express.Router();
+router.use(express.json());
 
+const funcionarioController = require('./controller/FuncionarioController')
 router.get('/funcionario', funcionarioController.findAll);
 router.get('/funcionario/:id', funcionarioController.findById);
 router.post('/funcionario', funcionarioController.create);
