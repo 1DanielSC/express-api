@@ -1,15 +1,5 @@
 const uuid = require('uuid');
-const mongoose = require('mongoose');
-
-const FuncionarioModel = mongoose.model('Funcionario', {
-    _id: String,
-    nome: String,
-    sexo: String,
-    departamento: String,
-    idade: Number,
-    salario: Number
-} );
-
+const { FuncionarioModel } = require('../model/Funcionario')
 
 const findAll = async (req, res) => {
     const funcionarios = await FuncionarioModel.find();

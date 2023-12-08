@@ -1,6 +1,6 @@
 const express = require('express'); 
 const cors = require('cors');
-const mongoose = require('mongoose');
+const { connectToDatabase } = require('./database/mongodb')
 const routes = require('./routes');
 require('dotenv').config()
 
@@ -20,25 +20,6 @@ const startServer = async () => {
     }); 
 }
 
-const mongodb_host = process.env.MONGODB_HOST || 'localhost';
-const mongodb_port = process.env.MONGODB_PORT || 27017;
-const mongodb_user = process.env.MONGODB_USERNAME || 'root';
-const mongodb_password = process.env.MONGODB_PASSWORD || 'root';
-const mongodb_database = process.env.MONGODB_DATABASE || 'database';
-const mongodb_url = 'mongodb://'+
-        mongodb_user+':'+mongodb_password+'@'+
-        mongodb_host+':'+mongodb_port+'/'+
-        mongodb_database;
-
-const connectToDatabase = async () => {
-    try {
-        console.log('Connecting to MongoDB...')
-        await mongoose.connect(mongodb_url);
-        console.log('Connected to MongoDB');
-    } catch (error) {
-        console.error('Error connecting to MongoDB:', error);
-    }
-}
 
 const initialize = async () => {
     await startServer();
