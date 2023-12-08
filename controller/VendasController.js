@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 
 const VendaModel = mongoose.model('Venda', {
     _id: String,
-    idVendedor: String,
     data: String,
+    idVendedor: String,
     produtos: [{
         idProduto: String,
-        preco: Number,
         nome: String,
+        preco: String,
         qntd: Number
     }]
 } );
@@ -55,7 +55,8 @@ const findById = async (req, res) => {
 const create = async (req, res) => {
     if(req &&
         req.body){
-        const { idVendedor, data, produtos} = req.body
+        console.log(req.body)
+        const { data, idVendedor, produtos} = req.body
 
         if(!idVendedor || !data || !produtos){
             res.status(400).send('Missing required fields.')

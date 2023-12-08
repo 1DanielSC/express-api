@@ -2,12 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const routes = require('./routes');
+const bodyParser = require('body-parser')
 require('dotenv').config()
 
 const app = express(); 
 app.use(cors());
 app.use(routes.router); //Rotas REST da aplicação
 app.use(express.json());
+app.use(bodyParser.json())
+
 
 const PORT = process.env.SERVER_PORT; 
 const startServer = async () => {
@@ -18,13 +21,6 @@ const startServer = async () => {
             console.log("Error occurred, server can't start", error); 
     }); 
 }
-
-const VendasController = require('./controller/VendasController')
-app.get('/venda', VendasController.findAll);
-app.get('/venda/vendedor/:id', VendasController.findByVendedor);
-app.get('/venda/:id', VendasController.findById);
-app.post('/venda', VendasController.create);
-app.delete('/venda/:id', VendasController.deleteById);
 
 const mongodb_host = process.env.MONGODB_HOST || 'localhost';
 const mongodb_port = process.env.MONGODB_PORT || 27017;
