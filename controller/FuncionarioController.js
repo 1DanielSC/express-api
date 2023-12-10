@@ -26,9 +26,9 @@ const findById = async (req, res) => {
 const create = async (req, res) => {
     if(req &&
         req.body){
-        const { nome, sexo, departamento, idade, salario } = req.body
+        const { nome, sexo, cpf, email, departamento, salario } = req.body
 
-        if(!nome || !idade || !salario){
+        if(!nome || !cpf || !salario){
             res.status(400).send('Missing required fields.')
             return
         }
@@ -36,9 +36,10 @@ const create = async (req, res) => {
         const newFuncionario = new FuncionarioModel({
             _id : uuid.v4(),
             nome: nome,
+            cpf: cpf,
+            email: email,
             sexo: sexo,
             departamento: departamento,
-            idade: idade,
             salario: salario
         });
         
@@ -63,15 +64,16 @@ const update = async (req, res) => {
                 return
             }
 
-            const { nome, sexo, departamento, idade, salario } = req.body
-            if(!nome || !idade || !salario){
+            const { nome, sexo, cpf, email, departamento, salario } = req.body
+            if(!nome || !cpf || !salario){
                 res.status(400).send('Missing required fields.')
                 return
             }
     
             entity.nome = nome
+            entity.cpf = cpf
+            entity.email = email,
             entity.salario = salario
-            entity.idade = idade
             entity.sexo = sexo
             entity.departamento = departamento
 
