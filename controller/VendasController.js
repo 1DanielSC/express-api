@@ -18,23 +18,6 @@ const findAll = async (req, res) => {
     res.status(200).send(vendas)
 };
 
-const findByVendedor = async (req, res) => {
-    if(req &&
-        req.params &&
-        req.params.id){
-            const idVendedor = req.params.id
-            const entity = await VendaModel.find((venda) => venda.idVendedor === idVendedor)
-            if(!entity){
-                res.status(404).send('Entity not found by id')
-                return
-            }
-            res.status(200).send(entity)
-        }
-    else{
-        res.status(400).send('Missing param \'id\'')
-    }
-};
-
 const findById = async (req, res) => {
     if(req &&
         req.params &&
@@ -96,6 +79,5 @@ module.exports = {
     findAll,
     findById,
     create,
-    findByVendedor,
     deleteById
 }

@@ -11,7 +11,6 @@ router.delete('/funcionario/:id', funcionarioController.deleteById);
 
 const VendasController = require('./controller/VendasController')
 router.get('/venda', VendasController.findAll);
-router.get('/venda/vendedor/:id', VendasController.findByVendedor);
 router.get('/venda/:id', VendasController.findById);
 router.post('/venda', VendasController.create);
 router.delete('/venda/:id', VendasController.deleteById);

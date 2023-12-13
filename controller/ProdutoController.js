@@ -63,7 +63,7 @@ const update = async (req, res) => {
             }
 
             const { nome, qntd, img, preco } = req.body
-            if(!nome || !qntd || !preco){
+            if(!nome || !(qntd  || qntd===0) || !preco){
                 res.status(400).send('Missing required fields.')
                 return
             }
